@@ -71,21 +71,27 @@ jobs:
           git apply --check /tmp/cudy-tr3600-v1-fixes.patch
           git apply /tmp/cudy-tr3600-v1-fixes.patch
 
-      - name: Add HomeProxy package feed
+      
+      - name: Install OpenWrt feeds and HomeProxy package
         shell: bash
         run: |
           set -euxo pipefail
           cd openwrt
 
-          echo 'src-git homeproxy https://github.com/immortalwrt/homeproxy.git' \
-            >> feeds.conf.default
-
+          # 更新并安装 OpenWrt 自带的软件包索引
           ./scripts/feeds update -a
-
           ./scripts/feeds install -a
 
-          # Explicitly install the HomeProxy LuCI package.
-          ./scripts/feeds install -p homeproxy luci-app-homeproxy
+          # HomeProxy 是独立软件包仓库，直接放入源码树
+          git clone --depth 1 \
+            https://github.com/immortalwrt/homeproxy.git \
+            package/luci-app-homeproxy
+
+          # 确认 HomeProxy 源码已正确下载
+          test -f package/luci-app-homeproxy/Makefile
+          grep -q '^PKG_NAME:=luci-app-homeproxy$' \
+            package/luci-app-homeproxy/Makefile
+
 
       - name: Configure firmware
         shell: bash
