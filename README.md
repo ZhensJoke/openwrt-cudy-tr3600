@@ -1,3 +1,6 @@
+#增加了KMOD-USB-NET的部分，用于USB共享网络。比如我在用ZTE F50一根USB链接供电和共享网络。
+
+
 # OpenWrt for Cudy TR3600 v1 (openwrt-25.12)
 
 基于 [openwrt-25.12](https://github.com/openwrt/openwrt/tree/openwrt-25.12) 分支 +
